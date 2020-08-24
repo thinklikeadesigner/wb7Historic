@@ -52,9 +52,9 @@ const cardTemplate = document.querySelector("#card__template").content;
 
 const imgModal = document.querySelector(".modal__img");
 
-function toggleModalWindow(modal) {
-  modal.classList.toggle("modal_open");
-}
+// function toggleModalWindow(modal) {
+//   modal.classList.toggle("modal_open");
+// }
 
 function AddFormSubmitHandler(evt) {
   evt.preventDefault();
@@ -69,34 +69,36 @@ function editFormSubmitHandler(evt) {
   profileJob.textContent = inputJob.value;
   toggleModalWindow(editModalWindow);
 }
+// function keydownClose(evt) {
+//   if (evt.key === "Escape" && addModalWindow.classList.contains("modal_open")) {
+//     togalModalWindow(addModalWindow);
+//     window.removeEventListener("keydown", keydownClose);
+//   }
+//   if (
+//     evt.key === "Escape" &&
+//     editModalWindow.classList.contains("modal_open")
+//   ) {
+//     toggleModalWindow(editModalWindow);
+//     window.removeEventListener("keydown", keydownClose);
+//   }
+//   if (evt.key === "Escape" && imgModalWindow.classList.contains("modal_open")) {
+//     toggleModalWindow(imgModalWindow);
+//     window.removeEventListener("keydown", keydownClose);
+//   }
+// }
 
-function keydownClose(evt) {
-  if (evt.key === "Escape") {
-    if (addModalWindow.classList.contains("modal_open")) {
-      toggleModalWindow(addModalWindow);
-      document.removeEventListener("keydown", keydownClose);
-    } else if (editModalWindow.classList.contains("modal_open")) {
-      toggleModalWindow(editModalWindow);
-      document.removeEventListener("keydown", keydownClose);
-    } else if (imgModalWindow.classList.contains("modal_open")) {
-      toggleModalWindow(imgModalWindow);
-      document.removeEventListener("keydown", keydownClose);
-    }
-  }
-}
-
-function closeClickModal(evt) {
-  if (evt.target === addModalWindow) {
-    toggleModalWindow(addModalWindow);
-    window.removeEventListener("click", closeClickModal);
-  } else if (evt.target === editModalWindow) {
-    toggleModalWindow(editModalWindow);
-    window.removeEventListener("click", closeClickModal);
-  } else if (evt.target === imgModalWindow) {
-    toggleModalWindow(imgModalWindow);
-    window.removeEventListener("click", closeClickModal);
-  }
-}
+// function closeClickModal(evt) {
+//   if (evt.target === addModalWindow) {
+//     toggleModalWindow(addModalWindow);
+//     window.removeEventListener("click", closeClickModal);
+//   } else if (evt.target === editModalWindow) {
+//     toggleModalWindow(editModalWindow);
+//     window.removeEventListener("click", closeClickModal);
+//   } else if (evt.target === imgModalWindow) {
+//     toggleModalWindow(imgModalWindow);
+//     window.removeEventListener("click", closeClickModal);
+//   }
+// }
 
 function newCard(title, url) {
   const cardElement = cardTemplate.cloneNode(true);
@@ -125,8 +127,8 @@ function newCard(title, url) {
     toggleModalWindow(imgModalWindow);
     const modalCaption = document.querySelector(".modal__caption");
     modalCaption.textContent = title;
-    window.addEventListener("click", closeClickModal);
-    document.addEventListener("keydown", keydownClose);
+    // window.addEventListener("click", closeClickModal);
+    // document.addEventListener("keydown", keydownClose);
   });
 
   return cardElement;
@@ -141,18 +143,18 @@ formAdd.addEventListener("submit", AddFormSubmitHandler);
 
 addButton.addEventListener("click", () => {
   toggleModalWindow(addModalWindow);
-  document.addEventListener("keydown", keydownClose);
-  window.addEventListener("click", closeClickModal);
+  // document.addEventListener("keydown", keydownClose);
+  // window.addEventListener("click", closeClickModal);
 });
 
 editButton.addEventListener("click", () => {
   if (!editModalWindow.classList.contains("modal_open")) {
-    inputName.value = profileName.textContent;
-    inputJob.value = profileJob.textContent;
+    // inputName.value = profileName.textContent;
+    // inputJob.value = profileJob.textContent;
   }
   toggleModalWindow(editModalWindow);
-  document.addEventListener("keydown", keydownClose);
-  window.addEventListener("click", closeClickModal);
+  // document.addEventListener("keydown", keydownClose);
+  // window.addEventListener("click", closeClickModal);
 });
 
 closeButtonImg.addEventListener("click", () => {
@@ -168,3 +170,49 @@ closeButtonAdd.addEventListener("click", () => {
   toggleModalWindow(addModalWindow);
   formAdd.reset();
 });
+
+function openModal(modal) {
+  modal.classList.add("modal_open");
+  window.addEventListener("keydown", escCloseModal);
+  window.addEventListener("click", clickClose);
+}
+function closeModal(modal) {
+  modal.classList.remove("modal_open");
+  window.removeEventListener("keydown", escCloseModal);
+  window.removeEventListener("click", clickClose);
+}
+function toggleModalWindow(modal) {
+  if (modal.classList.contains("modal_open")) {
+    closeModal(modal);
+  } else {
+    openModal(modal);
+  }
+}
+function escCloseModal(evt) {
+  if (evt.key == "Escape" && addModalWindow.classList.contains("modal_open")) {
+    closeModal(addModalWindow);
+    window.removeEventListener("keydown", escCloseModal);
+  }
+  if (evt.key == "Escape" && editModalWindow.classList.contains("modal_open")) {
+    closeModal(editModalWindow);
+    window.removeEventListener("keydown", escCloseModal);
+  }
+  if (evt.key == "Escape" && imgModalWindow.classList.contains("modal_open")) {
+    closeModal(imgModalWindow);
+    window.removeEventListener("keydown", escCloseModal);
+  }
+}
+function clickClose(evt) {
+  if (evt.target === addModalWindow) {
+    closeModal(addModalWindow);
+    window.removeEventListener("click", clickClose);
+  }
+  if (evt.target === editModalWindow) {
+    closeModal(editModalWindow);
+    window.removeEventListener("click", clickClose);
+  }
+  if (evt.target === imgModalWindow) {
+    closeModal(imgModalWindow);
+    window.removeEventListener("click", clickClose);
+  }
+}
