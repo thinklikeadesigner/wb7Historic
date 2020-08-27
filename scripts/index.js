@@ -97,9 +97,11 @@ function closeClickModal(evt) {
     window.removeEventListener("click", closeClickModal);
   }
 }
+
 class Card {
-  constructor(data, cardSelector) {
-    this.cardSelector = cardSelector;
+  constructor(title, url) {
+    this._title = title;
+    this._url = url;
   }
 
   _getTemplate() {
@@ -107,8 +109,43 @@ class Card {
       .querySelector("#card__template")
       .content.querySelector(".card")
       .cloneNode(true);
+
+    this._element = cardElement;
   }
+ 
+  _setEventListeners() {
+    this._element.querySelector(".card__text").addEventListener("click", () => {
+      this._handleCardClick();
+    });
+  }
+  // this._element.querySelector(".card__pic").src = this._url;
+  // this._element.querySelector(".card__pic").setAttribute("alt", this._title);
+  // this._element.querySelector(".card__title").textContent = this._title;
+// this._element.querySelector(".card__heart").addEventListener("click", (evt) =>
+// evt.target.classList.toggle("card__heart_active"));
+// this.element.querySelector(".card__delete-btn").addEventListener("click", () => {
+//   const listItem = cardDelete.closest(".card");
+//   listItem.remove();
+// });
+
+const imgModal = document.querySelector(".modal__img");
+
+_handleImageClick() {
+  imgModal.src = url;
+  imgModal.setAttribute("alt", title);
+  toggleModalWindow(imgModalWindow);
+  const modalCaption = document.querySelector(".modal__caption");
+  modalCaption.textContent = title;
+  window.addEventListener("click", closeClickModal);
+  document.addEventListener("keydown", keydownClose);
 }
+
+}
+
+class ArrayCards extends Card {
+  constructor()
+}
+
 function newCard(title, url) {
   const cardElement = cardTemplate.cloneNode(true);
 
